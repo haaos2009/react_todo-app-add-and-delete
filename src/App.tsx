@@ -9,6 +9,7 @@ import { FilterStatus } from './types/FilterStatus';
 import { Filter } from './components/Filter';
 import { TodoList } from './components/TodoList';
 import { NewTodo } from './components/NewTodo';
+import { ErrorNotification } from './components/ErrorNotification';
 
 export const App: React.FC = () => {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -27,7 +28,6 @@ export const App: React.FC = () => {
 
   useEffect(() => {
     setIsLoading(true);
-    setErrorMessage('');
     getTodos()
       .then(setTodos)
       .catch(() => setErrorMessage('Unable to load todos'))
@@ -187,21 +187,10 @@ export const App: React.FC = () => {
         )}
       </div>
 
-      <div
-        data-cy="ErrorNotification"
-        className={classNames(
-          'notification is-danger is-light has-text-weight-normal',
-          { hidden: !errorMessage },
-        )}
-      >
-        <button
-          data-cy="HideErrorButton"
-          type="button"
-          className="delete"
-          onClick={() => setErrorMessage('')}
-        />
-        {errorMessage}
-      </div>
+      <ErrorNotification
+        errorMessage={errorMessage}
+        onClose={() => setErrorMessage('')}
+      />
     </div>
   );
 };
